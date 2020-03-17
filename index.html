@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaikoMapWriter</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <link href="css/TMW.css?v=2020010603" rel="stylesheet">
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+
+    <script src="js/TMW-main.js"></script>
+
+    <script src="js//wavesurfer.js"></script>
+
+</head>
+<body>
+    <div class="mainframe wide">
+        <div class="nav">
+            <p>TaikoMapWriter</p>
+        </div>
+        <div class="main">
+            <div class="white-pannel">
+                <span>
+                    <button type="button" class="btn btn-default" id="diffculityShownEasy">花</button>
+                    <button type="button" class="btn btn-default" id="diffculityShownNomal">竹</button>
+                    <button type="button" class="btn btn-default" id="diffculityShownHard">松</button>
+                    <button type="button" class="btn btn-primary" id="diffculityShownOni">鬼</button>
+                </span>
+                </label>
+            </div>
+        </div>
+        <div class="waveform" id="waveform"></div>
+        <div class="main">
+            <div class="track" style="padding-left: 600px;"><div class="partition line" id="partition1">
+                    <div class="don s" style="left:-25px"></div>
+                    <div class="don s" style="left:125px"></div>
+                    <div class="ka s" style="left:275px"></div>
+                    <div class="ka s" style="left:425px"></div>
+                </div><div class="partition line" id="partition1">
+                    <div class="don s" style="left:-25px"></div>
+                    <div class="don s" style="left:125px"></div>
+                    <div class="ka s" style="left:275px"></div>
+                    <div class="ka s" style="left:425px"></div>
+                </div>
+            </div>
+            <div class="track"></div>
+        </div>
+    </div>
+    <div class="mainframe normal">
+        <div class="tja">
+            <textarea class="tja-editor"></textarea>
+        </div>
+        <div class="mapImage">
+            <button type="button" class="btn btn-success play">play</button>
+        </div>
+    </div>
+    <div class="fullscreen upload-content">
+        <p>
+            <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+            <br />
+            将tja谱面和乐曲文件拖至窗口内打开，可同时选中tja和乐曲拖拽，歌曲文件支持mp3格式
+            <br />
+            <b style="color: red" id="upload-alert">请使用电脑端操作，推荐使用chrome浏览器</b>
+        </p>
+    </div>
+    <div class="fullscreen upload" id="openFile" style="opacity: 0.1;"></div>
+</body>
+</html>
