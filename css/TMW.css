@@ -113,6 +113,17 @@ body{
     position: relative;
 }
 
+.track-canvas{
+    height: 9px;
+}
+
+
+
+
+
+
+/* no need more after canvas ready */
+
 div.don{
     background-color: rgb(236, 78, 78);
     border: 5px solid rgb(245, 238, 220);

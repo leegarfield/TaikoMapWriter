@@ -154,19 +154,19 @@ $(document).ready(function(){
                 file[sep[0]] = parseFloat(sep[1]);
                 break;
                 case 'SONGVOL':
-                file[sep[0]] = parseFloat(sep[1]);
+                file[sep[0]] = parseInt(sep[1]);
                 break;
                 case 'SEVOL':
+                file[sep[0]] = parseInt(sep[1]);
+                break;
+                case 'DEMOSTART':
                 file[sep[0]] = parseFloat(sep[1]);
                 break;
                 case 'SCOREMODE':
-                file[sep[0]] = parseFloat(sep[1]);
-                break;
-                case 'SCOREMODE':
-                file[sep[0]] = parseFloat(sep[1]);
+                file[sep[0]] = parseInt(sep[1]);
                 break;
                 case 'SIDE':
-                file[sep[0]] = parseFloat(sep[1]);
+                file[sep[0]] = parseInt(sep[1]);
                 break;
                 case 'COURSE':
                 console.log(sep[1]);

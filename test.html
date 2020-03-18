@@ -1,41 +1,32 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
-    <style>
-        .container{width:500px;height:500px;border:1px solid #DEDEDE;}
-        .container span{width:1px;height:50px;float:left;border-bottom:2px solid #F00;margin-bottom:0px;}
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaikoMapWriter</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <link href="css/TMW.css?v=2020010603" rel="stylesheet">
+    
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+
+    <script src="js/TMW-canvas.js"></script>
+
+
 </head>
 <body>
-    <div class="container">
+    <div class="track">
+        <canvas class="track-canvas" id="partition1"></canvas>
     </div>
+    <script>
+$(document).ready(function(){
+    var testObj = canvasDrawTmw;
+    testObj.setCanvasDiv = $('#track');
+    testObj.directDraw('10102020');
+});
+    </script>
 </body>
-<script>
-var i = 0;
-(function abc() {
-    setTimeout(function () {
-        if (i++ < 500) {
-            var me = document.getElementsByClassName("container");
-            var j = document.createElement('span');
-            var th = document.getElementsByTagName("span");
-            var h = 0;
-            if (i > 1) {
-                var l = i - 2;
-                var h = th[l].clientHeight;
-                <!-- console.log(h) -->
-            } else {
-                h = 50;
-            }
-            var arr = new Array(-2,-1,0,1,2);
-            var k = Math.floor((Math.random() * 5));
-            j.style.height = h + arr[k] + "px";
-            me[0].appendChild(j);
-            <!-- console.log(arr + " " + k); -->
-            abc();
-        }
-    }, 50);
-})()
-</script>
 </html>
