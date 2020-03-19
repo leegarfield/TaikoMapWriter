@@ -108,13 +108,7 @@ body{
     margin-bottom: 10px;
     min-width: 100%;
     background-color: #333;
-    border-top: 2px solid #ccc;
-    border-bottom: 2px solid #ccc;
     position: relative;
-}
-
-.track-canvas{
-    height: 9px;
 }
 
 
@@ -142,6 +136,12 @@ div.don.l{
 }
 div.ka{
     background-color: rgb(67, 194, 216);
+    border: 5px solid rgb(245, 238, 220);
+    border-radius: 50%;
+    position: absolute;
+}
+div.balloum{
+    background-color: rgb(236, 115, 78);
     border: 5px solid rgb(245, 238, 220);
     border-radius: 50%;
     position: absolute;

@@ -17,16 +17,32 @@
 
 
 </head>
-<body>
+<body onresize=resizeCanvas()>
     <div class="track">
-        <canvas class="track-canvas" id="partition1"></canvas>
+        <canvas height="102" width="102" class="track-canvas"></canvas>
     </div>
     <script>
+
+//resize canvas Obj
+var testObj = new canvasDrawTmw;
+testObj.setCanvasDiv($('.track'));
+
+$('.track-canvas').attr('width', window.innerWidth.toString());
+var resizeCanvas = function(){
+    $('.track-canvas')[0].width = window.innerWidth.toString();
+};
+
 $(document).ready(function(){
-    var testObj = canvasDrawTmw;
-    testObj.setCanvasDiv = $('#track');
-    testObj.directDraw('10102020');
+
+    testObj.testDraw();
+    doAnmation();
+
 });
+
+var doAnmation = function(){
+    testObj.testDraw();
+    window.requestAnimationFrame(doAnmation)
+}
     </script>
 </body>
 </html>
