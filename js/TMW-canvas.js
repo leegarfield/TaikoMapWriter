@@ -29,13 +29,22 @@ canvasDrawTmw.selectCourse = function(course = String){
 
 //select div parent of canvas
 canvasDrawTmw.setCanvasDiv = function(divObj = Object){
-    this.canvasDiv = divObj;
+    this.canvas = divObj.children()[0].getContext('2d');
+}
+//select canvas directly
+canvasDrawTmw.setCanvas = function(canvasObj = Object){
+    this.canvas = canvasObj[0].getContext('2d');
 }
 
 //draw!
 canvasDrawTmw.draw = function(partionNum = int){
     if (this.tjaLoaded){
-        this.directDraw(partionNum);
+        if(this.canvas[partionNum].length<1){
+            console.log('canvas.js: canvas not exist!');
+            return;
+        }else{
+            this.directDraw(partionNum);
+        }
     }else{
         console.log('canvas.js: parent Div not set!');
     }
@@ -44,7 +53,7 @@ canvasDrawTmw.draw = function(partionNum = int){
 //draw @directStr into @partionNum, else draw from file if @directStr not set
 canvasDrawTmw.directDraw = function(partionNum = int, directStr = String){
     if(directStr){
-        // this.canvasDiv.children
+        this.canvas = this.canvasDiv.children()
     }
     console.log(directStr);
 }
