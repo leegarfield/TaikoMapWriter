@@ -21,6 +21,9 @@
     <div class="track">
         <canvas height="102" width="102" class="track-canvas"></canvas>
     </div>
+    <div>
+        <button id="startAnamation">开始动画</button>
+    </div>
     <script>
 
 //resize canvas Obj
@@ -33,9 +36,13 @@ var resizeCanvas = function(){
 };
 
 $(document).ready(function(){
-
+    testObj.noteOffset = 0;
     testObj.testDraw();
-    doAnmation();
+    
+    $('#startAnamation').click(function(){
+        testObj.noteOffset = -1200;
+        doAnmation();
+    });
 
 });
 
