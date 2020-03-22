@@ -22,11 +22,15 @@
         <canvas height="102" width="102" class="track-canvas"></canvas>
     </div>
     <div>
-        <button id="startAnamation">开始动画</button>
+        <button id="bindMousehover">打开吸附提示</button>
+        <button id="unbindMousehover">关闭吸附提示</button>
+        <button id="startroll">开始滚动</button>
+        <button id="stoproll">停止滚动</button>
     </div>
     <script>
 
 //resize canvas Obj
+var rolling = false;
 var testObj = new canvasDrawTmw;
 testObj.setCanvasDiv($('.track'));
 
@@ -37,17 +41,33 @@ var resizeCanvas = function(){
 
 $(document).ready(function(){
     testObj.noteOffset = 0;
+    testObj.loadTemplate();
     testObj.testDraw();
     
-    $('#startAnamation').click(function(){
-        testObj.noteOffset = -1200;
-        doAnmation();
+    doAnmation();
+    $('#bindMousehover').click(function(){
+        testObj.bindMouseHover(testObj);
+    });
+    $('#unbindMousehover').click(function(){
+        testObj.unbindMouseHover(testObj);
+    });
+    $('#startroll').click(function(){
+        rolling = true;
+    });
+    $('#stoproll').click(function(){
+        rolling = false;
     });
 
 });
 
 var doAnmation = function(){
-    testObj.testDraw();
+    if(rolling){
+        testObj.timeOffset += 5;
+    }
+    testObj.draw();
+    if (testObj.timeOffset > 1200){
+        testObj.timeOffset = -1200;
+    }
     window.requestAnimationFrame(doAnmation)
 }
     </script>

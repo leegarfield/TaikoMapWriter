@@ -6,7 +6,15 @@ var canvasDrawTmw = function(){
     //init
     this.tjaFile = [];
     this.template = [];
-    this.noteOffset = -1200;
+    this.noteOffset = 0;
+    this.timeOffset = 0;
+    this.scaleEle = [];
+    this.defaultPartitionPx = 643;
+    this.canvasEleOffset = 53;
+    this.showSnap = true;
+    
+    //snap
+    this.mousePointing = [0,0];
     
     //method
     
@@ -44,13 +52,30 @@ var canvasDrawTmw = function(){
     }
     
     //draw!
-    this.draw = function(partionNum = int){
+    this.draw = function(partionNum = Number){
+        //testdraw for present
+        this.testDraw();
+
+        var Gap48 = this.defaultPartitionPx / 48,
+        Gap64 = this.defaultPartitionPx / 64,
+        snapInitOffset = 53,
+        afterOffset = 48.5;
+
+        if(this.showSnap){
+            if(this.mousePointing[1] == 3){
+                this.canvas.drawImage(this.template['mouseSnap'], this.mousePointing[0] * Gap48 + afterOffset + this.timeOffset, 5);
+            }else if(this.mousePointing[1] == 4){
+                this.canvas.drawImage(this.template['mouseSnap'], this.mousePointing[0] * Gap64 + afterOffset + this.timeOffset, 88);
+            }
+        }
+
+        return;
+
         if (this.tjaLoaded){
             if(this.canvas[partionNum].length<1){
                 console.log('canvas.js: canvas not exist!');
                 return;
             }else{
-                this.directDraw(partionNum);
             }
         }else{
             console.log('canvas.js: parent Div not set!');
@@ -58,7 +83,7 @@ var canvasDrawTmw = function(){
     }
     
     //draw @directStr into @partionNum, else draw from file if @directStr not set
-    this.directDraw = function(partionNum = int, directStr = String){
+    this.directDraw = function(partionNum = Number, directStr = String){
         if(directStr){
             this.canvas = this.canvasDiv.children()[0];
         }
@@ -67,59 +92,79 @@ var canvasDrawTmw = function(){
     
     //test func, draw sonmething
     this.testDraw = function(){
-        this.loadTemplate();
-        var offset = this.noteOffset;
-        this.noteOffset += 3;
-        if(this.noteOffset > 1200){
-            this.noteOffset = -1200;
-        }
-        var partition = 643;
+        var partition = this.defaultPartitionPx;
 
         // clear canvas
         this.canvasEle.height = this.canvasEle.height;
 
-        // partition line
-        for (var i=0; i<108; i++){
-            if(i % 3 != 0){
-                this.canvas.drawImage(this.template['subPartition9'], partition*i/36-offset,0);
-            }else if(i % 9 != 0){
-                this.canvas.drawImage(this.template['subPartition3'], partition*i/36-offset,0);
-            }
+        //scale
+        for(var i = 0; i<12; i++){
+            this.canvas.drawImage(this.drawScaleElement(4), partition*i/4- this.noteOffset - this.timeOffset,0);
+            this.canvas.drawImage(this.template['subPartition'], partition*i/4- this.noteOffset - this.timeOffset,0);
         }
-        for (var i=0; i<192; i++){
-            if(i % 4 != 0){
-                this.canvas.drawImage(this.template['subPartition16'], partition*i/64-offset,0);
-            }else if(i % 16 != 0){
-                this.canvas.drawImage(this.template['subPartition4'], partition*i/64-offset,0);
-            }
-        }
-        for (var i=0; i<12; i++){
-            this.canvas.drawImage(this.template['subPartition'], partition*i/4-offset,0);
-        }
-        this.canvas.drawImage(this.template['partition'], partition*2-offset,0);
-        this.canvas.drawImage(this.template['partition'], partition*1-offset,0);
-        this.canvas.drawImage(this.template['partition'], partition*0-offset,0);
+
+        this.canvas.drawImage(this.template['partition'], partition*2- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['partition'], partition*1- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['partition'], partition*0- this.noteOffset - this.timeOffset,0);
         // note
-        this.canvas.drawImage(this.drawCo_l(partition/4*1), partition/8*16-offset,0);
-        this.canvas.drawImage(this.drawBalloom(partition/4*1), partition/8*12-offset,0);
-        // this.canvas.drawImage(this.template['ba'], partition/8*12-offset,0);
-        this.canvas.drawImage(this.template['Ka_l'], partition/8*11-offset,0);
-        this.canvas.drawImage(this.template['Don_l'], partition/8*10-offset,0);
-        this.canvas.drawImage(this.template['Ka_l'], partition/8*9-offset,0);
-        this.canvas.drawImage(this.template['Don_l'], partition/8*8-offset,0);
-        this.canvas.drawImage(this.drawCo_s(partition/8*1), partition/8*6-offset,0);
-        this.canvas.drawImage(this.template['Ka_s'], partition/24*15-offset,0);
-        this.canvas.drawImage(this.template['Ka_s'], partition/24*14-offset,0);
-        this.canvas.drawImage(this.template['Don_s'], partition/24*13-offset,0);
-        this.canvas.drawImage(this.template['Don_s'], partition/24*12-offset,0);
-        this.canvas.drawImage(this.template['Ka_s'], partition/48*20-offset,0);
-        this.canvas.drawImage(this.template['Don_s'], partition/48*16-offset,0);
-        this.canvas.drawImage(this.template['Don_s'], partition/48*12-offset,0);
-        this.canvas.drawImage(this.template['Ka_s'], partition/16*2-offset,0);
-        this.canvas.drawImage(this.template['Don_s'], partition/16*1-offset,0);
-        this.canvas.drawImage(this.template['Don_s'], partition/16*0-offset,0);
-    }
+        this.canvas.drawImage(this.drawCo_l(partition/4*1), partition/8*16- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.drawBalloom(partition/4*1), partition/8*12- this.noteOffset - this.timeOffset,0);
+        // this.canvas.drawImage(this.template['ba'], partition/8*12- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Ka_l'], partition/8*11- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_l'], partition/8*10- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Ka_l'], partition/8*9- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_l'], partition/8*8- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.drawCo_s(partition/8*1), partition/8*6- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Ka_s'], partition/24*15- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Ka_s'], partition/24*14- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_s'], partition/24*13- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_s'], partition/24*12- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Ka_s'], partition/48*20- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_s'], partition/48*16- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_s'], partition/48*12- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Ka_s'], partition/16*2- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_s'], partition/16*1- this.noteOffset - this.timeOffset,0);
+        this.canvas.drawImage(this.template['Don_s'], partition/16*0- this.noteOffset - this.timeOffset,0);
+    };
     
+    // bind mouse hover event
+    this.bindMouseHover = function(thisObj){
+        var Gap48 = thisObj.defaultPartitionPx / 48,
+        Gap64 = thisObj.defaultPartitionPx / 64,
+        snapInitOffset = 53,
+        afterOffset = 48.5,
+        mousePointing = thisObj.mousePointing;
+        
+        $(this.canvasEle).mousemove(function(e){
+            mousePointing = thisObj.mousePointing;
+            
+            if(e.offsetY < 35){
+                thisObj.mousePointing = [parseInt((e.offsetX - snapInitOffset - thisObj.timeOffset + Gap48 / 2) / (Gap48)), 3];
+            }else if(e.offsetY > 67){
+                thisObj.mousePointing = [parseInt((e.offsetX - snapInitOffset - thisObj.timeOffset + Gap64 / 2) / (Gap64)), 4];
+            }
+
+            if(mousePointing[0] < 0){
+                mousePointing[0] = 0;
+            }
+
+            if((mousePointing[0] == thisObj.mousePointing[0]) && (mousePointing[1] == thisObj.mousePointing[1])){
+                return;
+            }
+        });
+        $(this.canvasEle).mouseleave(function(e){
+            thisObj.showSnap = false;
+        });
+        $(this.canvasEle).mouseenter(function(e){
+            thisObj.showSnap = true;
+        });
+    };
+    //unbind mouse hover event
+    this.unbindMouseHover = function(thisObj){
+        $(this.canvasEle).unbind('mousemove');
+        this.showSnap = false;
+    };
+
     //load all element needs to be draw
     this.loadTemplate = function(){
         var colorDon = 'rgb(243,71,40)',
@@ -128,6 +173,7 @@ var canvasDrawTmw = function(){
         colorCo = 'rgb(243,181,0)',
         colorba = 'rgb(248,119,0)',
         colorbaBa = 'rgb(248,79,0)';
+
         //don s (L: 50px, border: -2,5px))
         var canvasObj = document.createElement('canvas');
         canvasObj.width = 106;
@@ -356,7 +402,7 @@ var canvasDrawTmw = function(){
         canvasObj.height = 102;
         ele = canvasObj.getContext('2d');
         ele.fillStyle = '#bbb';
-        ele.fillRect(52, 0, 3, 103);
+        ele.fillRect(52, 0, 2, 103);
         this.template['partition'] = canvasObj;
         
         canvasObj = document.createElement('canvas');
@@ -364,7 +410,7 @@ var canvasDrawTmw = function(){
         canvasObj.height = 102;
         ele = canvasObj.getContext('2d');
         ele.fillStyle = '#888';
-        ele.fillRect(53, 10, 1, 83);
+        ele.fillRect(53, 0, 1, 102);
         this.template['subPartition'] = canvasObj;
         
         canvasObj = document.createElement('canvas');
@@ -372,7 +418,7 @@ var canvasDrawTmw = function(){
         canvasObj.height = 102;
         ele = canvasObj.getContext('2d');
         ele.fillStyle = '#555';
-        ele.fillRect(53, 10, 1, 23);
+        ele.fillRect(53, 0, 1, 29);
         this.template['subPartition3'] = canvasObj;
 
         canvasObj = document.createElement('canvas');
@@ -380,15 +426,15 @@ var canvasDrawTmw = function(){
         canvasObj.height = 102;
         ele = canvasObj.getContext('2d');
         ele.fillStyle = '#555';
-        ele.fillRect(53, 10, 1, 10);
-        this.template['subPartition9'] = canvasObj;
+        ele.fillRect(53, 4, 1, 13);
+        this.template['subPartition6'] = canvasObj;
 
         canvasObj = document.createElement('canvas');
         canvasObj.width = 106;
         canvasObj.height = 102;
         ele = canvasObj.getContext('2d');
         ele.fillStyle = '#555';
-        ele.fillRect(53, 70, 1, 23);
+        ele.fillRect(53, 74, 1, 29);
         this.template['subPartition4'] = canvasObj;
 
         canvasObj = document.createElement('canvas');
@@ -396,12 +442,23 @@ var canvasDrawTmw = function(){
         canvasObj.height = 102;
         ele = canvasObj.getContext('2d');
         ele.fillStyle = '#555';
-        ele.fillRect(53, 83, 1, 10);
+        ele.fillRect(53, 83, 1, 13);
         this.template['subPartition16'] = canvasObj;
 
+        canvasObj = document.createElement('canvas');
+        canvasObj.width = 10;
+        canvasObj.height = 10;
+        ele = canvasObj.getContext('2d');
+        var grident = ele.createRadialGradient(5,5,2,5,5,5);
+        grident.addColorStop(0, '#fff');
+        grident.addColorStop(0.01, 'rgba(255,255,110,1)');
+        grident.addColorStop(1, 'rgba(255,255,110,0)');
+        ele.fillStyle = grident;
+        ele.fillRect(0, 0, 10, 10);
+        this.template['mouseSnap'] = canvasObj;
     }
 
-    // draw combo note
+    // draw combo note small
     this.drawCo_s = function(duration){
         var colorCo = 'rgb(243,181,0)';
         var canvasObj = document.createElement('canvas');
@@ -424,6 +481,7 @@ var canvasDrawTmw = function(){
         ele.drawImage(this.template['Co_sstart'], 0, 0);
         return canvasObj;
     }
+    // draw combo note large
     this.drawCo_l = function(duration){
         var colorCo = 'rgb(243,181,0)';
         var canvasObj = document.createElement('canvas');
@@ -446,6 +504,7 @@ var canvasDrawTmw = function(){
         ele.drawImage(this.template['Co_lstart'], 0, 0);
         return canvasObj;
     }
+    // draw balloom
     this.drawBalloom = function(duration){
         var colorba = 'rgb(248,119,0)';
         var canvasObj = document.createElement('canvas');
@@ -467,5 +526,60 @@ var canvasDrawTmw = function(){
         ele.drawImage(this.template['ba_end'], duration, 0);
         ele.drawImage(this.template['ba'], 0, 0);
         return canvasObj;
+    }
+    //draw scale, #MEASURE N/4 #scroll scorllSpeed
+    this.drawScaleElement = function(scorllSpeed){
+        if (this.scaleEle[scorllSpeed]){
+            return this.scaleEle[scorllSpeed];
+        }
+
+        var canvasObj = document.createElement('canvas');
+        canvasObj.width = this.defaultPartitionPx / 16 * scorllSpeed + this.canvasEleOffset;
+        canvasObj.height = 102;
+        var ele = canvasObj.getContext('2d'), width = this.defaultPartitionPx / 16 * scorllSpeed;
+        
+        for (var i=0; i<12; i++){
+            if(i % 4 != 0){
+                ele.drawImage(this.template['subPartition6'], width*i/12,0);
+            }else {
+                ele.drawImage(this.template['subPartition3'], width*i/12,0);
+            }
+        }
+        for (var i=0; i<16; i++){
+            if(i % 4 != 0){
+                ele.drawImage(this.template['subPartition16'], width*i/16,0);
+            }else {
+                ele.drawImage(this.template['subPartition4'], width*i/16,0);
+            }
+        }
+        this.scaleEle[scorllSpeed] = canvasObj;
+        return canvasObj;
+    }
+    //draw pattition section, #MEASURE N/M #scroll scorllSpeed
+    this.drawPatition = function(m, n, scorllSpeed){
+        if (this.Partition[m][n][scrollSpeed].length > 1){
+            return this.Partition[m][n][scrollSpeed];
+        }
+
+        var offset = 53;
+        var canvasObj = document.createElement('canvas');
+        canvasObj.width = this.defaultPartitionPx / N * scorllSpeed;
+        canvasObj.height = 102;
+        var ele = canvasObj.getContext('2d');
+        
+        for (var i=0; i<48; i++){
+            if(i % 4 != 0){
+                this.canvas.drawImage(this.template['subPartition6'], partition*i/48- this.noteOffset - this.timeOffset,0);
+            }else if(i % 9 != 0){
+                this.canvas.drawImage(this.template['subPartition3'], partition*i/48- this.noteOffset - this.timeOffset,0);
+            }
+        }
+        for (var i=0; i<64; i++){
+            if(i % 4 != 0){
+                this.canvas.drawImage(this.template['subPartition16'], partition*i/64- this.noteOffset - this.timeOffset,0);
+            }else if(i % 16 != 0){
+                this.canvas.drawImage(this.template['subPartition4'], partition*i/64- this.noteOffset - this.timeOffset,0);
+            }
+        }
     }
 }
